@@ -4,7 +4,9 @@
 	# We want to calculate from the first preseason game but if we are in January
 	# the season will need to be the previous year
 	$year = $today->format('m') < 7 ? $today->format('Y') -1 : $today->format('Y');
-	$stDate = "http://www.nfl.com/ajax/scorestrip?season=$year&seasonType=REG&week=1";
+	$dataRoot = "https://picks-bmsthomp-data.s3-us-west-2.amazonaws.com/"
+	// $stDate = "http://www.nfl.com/ajax/scorestrip?season=$year&seasonType=REG&week=1";
+	$stDate = $dataRoot . "$year/$year" . "1";
 
 	if ($sxmlData = file_get_contents($stDate)) {
     	$sxml = simplexml_load_string($sxmlData);
