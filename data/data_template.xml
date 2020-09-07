@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<parent>
+<data>
     <gms w="1" y="1">
         <g eid="test" v="test" h="test" vs="0" hs="0" q="" />
         <g eid="test1" v="test1" h="tes1" vs="0" hs="0" q="" />
     </gms>
-</parent>
+</data>
