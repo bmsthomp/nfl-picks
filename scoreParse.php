@@ -10,7 +10,7 @@ if (isset($_GET["week"]) && isset($_GET["season"]) && isset($_GET["seasonType"])
 } 
 //load source code, depending on the current week, of the website into a variable as a string
 // $url = "http://www.nfl.com/ajax/scorestrip?season=$year&seasonType=$seasonType&week=$days";
-$url = $dataRoot . $year . "/" . $year . $days;
+$url = $dataRoot . $year . "/" . $year . $days . ".xml";
 
 #$url = "http://www.nfl.com/liveupdate/scorestrip/ss.xml"; //LIVE GAMES
 
