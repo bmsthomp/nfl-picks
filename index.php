@@ -1,7 +1,6 @@
 <?php 
 	session_start();
 	require 'head.php';
-	require 'connection.php';
 
 	//check for failed log in
 	if (isset($_SESSION['errors'])) {
@@ -36,7 +35,7 @@
 						</div>
 						<div class="col-lg-10">
 							<em>Not a member? <a href="signup.php">Sign up</a></em>
-						</div>						
+						</div>
 					</div>
 				</fieldset>
 			</form>
