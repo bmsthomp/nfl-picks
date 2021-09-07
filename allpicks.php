@@ -21,9 +21,9 @@
 	$tbl_name = "picks";
 	$tbl_name_2 = "schedule";
 	$sql="SELECT schedule.away, schedule.ascore, schedule.home, schedule.hscore, schedule.matchup, picks.uid, picks.team FROM schedule INNER JOIN picks ON picks.week = schedule.week AND picks.season = schedule.season AND picks.matchup = schedule.matchup WHERE schedule.season = $year AND schedule.week = $days ORDER BY picks.uid";
-	$result=mysql_query($sql);
+	$result=mysqli_query($con, $sql);
 	$resultSet = array();
-	while ($row = mysql_fetch_array($result)) {
+	while ($row = mysqli_fetch_array($result)) {
 		array_push($resultSet, array("uid" => $row['uid'], "team" => $row['team']));
 	}
 
@@ -58,9 +58,9 @@
 	}
 
 	$sql = "SELECT matchup, away, home, ascore, hscore FROM $tbl_name_2 WHERE season=$year and week=$days";
-	$sResult=mysql_query($sql);
+	$sResult=mysqli_query($con, $sql);
 	#print_r($resultSet);
-
+	mysqli_close($con);
 ?> 
 
 
@@ -78,7 +78,7 @@
 				<?php 
 					$i = 1;
 					$j = count($uids);
-					while ($row = mysql_fetch_array($sResult)){
+					while ($row = mysqli_fetch_array($sResult)){
 						echo "<tr><td>$row[1]</td><td>$row[3]</td><td>$row[2]</td><td>$row[4]</td>";
 						foreach ($uids as $uid) {
 							echo "<td>{$pArray[$uid][$i]}</td>";

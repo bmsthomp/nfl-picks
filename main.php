@@ -22,7 +22,7 @@
 	$uid = $_SESSION['username'];
 	$tbl_name = "schedule";
 	$sql="SELECT * FROM $tbl_name WHERE week=$wkd and season=$year ORDER BY matchup ASC";
-	$result=mysql_query($sql);
+	$result=mysqli_query($con, $sql);
 	$matches = 0;
 
 	$uid = $_SESSION['username'];
@@ -48,13 +48,13 @@
 			<tbody>
 			<?php 
 			#echo $matches[0];
-				while($row = mysql_fetch_array($result)){
+				while($row = mysqli_fetch_array($result)){
 					$matches ++;
 
 					# Grab pick for matchup $matches
 					$sql="SELECT team FROM $tbl_name WHERE matchup=$matches and week=$wkd and season=$year and uid='$uid'";
-					$picks = mysql_query($sql);
-					$pick = mysql_fetch_array($picks);
+					$picks = mysqli_query($con, $sql);
+					$pick = mysqli_fetch_array($picks);
 
 					# If the game has ended set a name on the row
 					$gameState = "on";

@@ -40,25 +40,25 @@ foreach ($games['gms']['g'] as $gameArray) {
     $home_score = (int)$game['hs'];
 
     $sql = "SELECT geid FROM schedule WHERE geid=$geid";
-    $eid = mysql_query($sql);
+    $eid = mysqli_query($con, $sql);
     
-    if (mysql_num_rows($eid) == 0) {
+    if (mysqli_num_rows($eid) == 0) {
 
         $sql = "SELECT MAX(matchup) FROM schedule WHERE week=$game_array[0] and season=$game_array[1]";
-        $results = mysql_query($sql);
-        $mxMtchup = mysql_fetch_array($results);
+        $results = mysqli_query($con, $sql);
+        $mxMtchup = mysqli_fetch_array($results);
 
         if ($mxMtchup[0] != null && $mxMtchup[0] != '') { $matchup = $mxMtchup[0] +1; }
         else { $matchup = 1; }
 
         $sql = "INSERT INTO schedule (matchup, week, season, home, away, geid, seasonType) VALUES ('$matchup', $game_array[0], $game_array[1], '$home_team', '$away_team', '$geid', '$seasonType')";
-        $test = mysql_query($sql);
+        $test = mysqli_query($con, $sql);
         if (!$test){echo "failed";}
 
     } else {
 
         //ONLY PULL SCORES FROM COMPLETED GAMES - F=FINAL, FO=FINAL OVERTIME
-        if ($game['q'] == 'F' || $game['q'] == 'FO') {        
+        if ($game['q'] == 'F' || $game['q'] == 'FO') {
 
             if ($away_score == $home_score){
                 $winner = "T";
@@ -66,9 +66,9 @@ foreach ($games['gms']['g'] as $gameArray) {
                 $winner = ($away_score > $home_score) ? $away_team : $home_team;
             }
             $sql = "UPDATE schedule SET hscore='$home_score', ascore='$away_score', winner='$winner' WHERE geid='$geid'";
-            mysql_query($sql);
+            mysqli_query($con, $sql);
             
         }
     }
 }
-mysql_close();
+mysqli_close($con);

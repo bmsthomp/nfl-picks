@@ -6,8 +6,8 @@
 
 	$tbl_name = "schedule";
 	$sql="SELECT MIN(season) FROM $tbl_name";
-	$result=mysql_query($sql);
-	$oldest=mysql_fetch_array($result);
+	$result=mysqli_query($con, $sql);
+	$oldest=mysqli_fetch_array($result);
 
 ?>
 <div class="jumbotron">
@@ -66,9 +66,9 @@
 				</tr>
 				<?php
 					$sql="SELECT home,away,hscore,ascore,matchup FROM $tbl_name WHERE week=$week and season=$season";
-					$result=mysql_query($sql);
-					if (mysql_num_rows($result) > 0) {
-						while($row = mysql_fetch_array($result)){
+					$result=mysqli_query($con, $sql);
+					if (mysqli_num_rows($result) > 0) {
+						while($row = mysqli_fetch_array($result)){
 							echo "<tr><td>$row[1]</td><td><input name=\"ascore$row[4]\" value=\"$row[3]\" length=\"5\"></td><td>@</td><td>$row[0]</td><td><input name=\"hscore$row[4]\" value=\"$row[2]\" length=\"5\"></td></tr>";
 						}
 						$num = (int)$row[4] + 1;
@@ -84,4 +84,7 @@
 	</div>
 </div>
 
-<?php require 'footer.php'; ?>
+<?php 
+	mysqli_close($con);
+	require 'footer.php';
+?>

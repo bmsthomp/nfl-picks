@@ -39,10 +39,12 @@
       <?php 
         }
       ?>
-      </div>    
+      </div>
     </div>
   </nav>
-  <?php require 'scoreParse.php'; ?>
+  <?php 
+  // require 'scoreParse.php'; 
+  ?>
 
 
 

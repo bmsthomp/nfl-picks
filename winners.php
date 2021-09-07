@@ -6,8 +6,8 @@
 
 	$tbl_name = "schedule";
 	$sql="SELECT * FROM $tbl_name WHERE week=$days and season=$year";
-	$result=mysql_query($sql);
-
+	$result=mysqli_query($con, $sql);
+	mysqli_close($con);
 
 ?>
 
@@ -24,7 +24,7 @@
 				<tbody>
 				<?php 
 				echo $matches[0];
-					while($row = mysql_fetch_array($result)){
+					while($row = mysqli_fetch_array($result)){
 						$matches ++; 
 						echo "<tr><td>$row[5]</td><td><input name=\"ascore$matches\" value=\"$row[7]\"></td><td>$row[4]</td><td><input name=\"hscore$matches\" value=\"$row[6]\"></td></tr>";
 					}

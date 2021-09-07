@@ -12,19 +12,20 @@
 
 		require 'connection.php';
 
-		$uid = mysql_real_escape_string(stripslashes($uid));
-		$fname = mysql_real_escape_string(stripslashes($fname));
-		$lname = mysql_real_escape_string(stripslashes($lname));
-		$password = mysql_real_escape_string(stripslashes($password));
+		$uid = mysqli_real_escape_string($con, $uid);
+		$fname = mysqli_real_escape_string($con, $fname);
+		$lname = mysqli_real_escape_string($con, $lname);
+		$password = mysqli_real_escape_string($con, $password);
 
-		$sql_check = mysql_query("SELECT uid FROM users WHERE uid ='$uid';");
-		$sql_check = mysql_num_rows($sql_check);
+		$sql_check = mysqli_query($con, "SELECT uid FROM users WHERE uid ='$uid';");
+		mysqli_close($con);
+		$sql_check = mysqli_num_rows($sql_check);
 
 		// the uid is unique
 		if ($sql_check==0){ 
 
 			$sql = "INSERT INTO users (uid, fname, lname, pw) VALUES ('$uid', '$fname', '$lname', MD5('$password'));";
-			$result = mysql_query($sql);
+			$result = mysqli_query($con, $sql);
 
 			if (!$result){
 				$_SESSION['errors'] = array("Could not create account.");

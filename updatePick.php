@@ -15,20 +15,20 @@
 		if ($pick != ''){
 			//echo $pick . " is not null";
 			$sql = "SELECT geid, matchup FROM schedule WHERE week=$wkd and season=$year and (home='$pick' or away='$pick')";
-			$result = mysql_query($sql);
+			$result = mysqli_query($con, $sql);
 
-			if (mysql_num_rows($result) == 1){
+			if (mysqli_num_rows($result) == 1){
 
-				$geid = mysql_fetch_array($result);
+				$geid = mysqli_fetch_array($result);
 				$psql = "SELECT team FROM $tbl_name WHERE week=$wkd and season=$year and geid='$geid[0]' and uid='$uid'";
-				$result = mysql_query($psql);
+				$result = mysqli_query($con, $psql);
 
-				if (mysql_num_rows($result) == 1 && $result){
+				if (mysqli_num_rows($result) == 1 && $result){
 					//echo "trying an update";
-					$result = mysql_query("UPDATE $tbl_name SET team='$pick' WHERE geid='$geid[0]' and uid='$uid'");
+					$result = mysqli_query($con, "UPDATE $tbl_name SET team='$pick' WHERE geid='$geid[0]' and uid='$uid'");
 				} elseif ($result) {
 					//echo "trying an insert";
-					$result = mysql_query("INSERT INTO $tbl_name (uid, week, matchup, team, season, geid) VALUES ('$uid', $wkd, $geid[1], '$pick', $year, '$geid[0]')");
+					$result = mysqli_query($con, "INSERT INTO $tbl_name (uid, week, matchup, team, season, geid) VALUES ('$uid', $wkd, $geid[1], '$pick', $year, '$geid[0]')");
 				}
 				else {
 					// query failed
@@ -39,6 +39,7 @@
 			else { $_SESSION['errors'] = array("Error updating picks. Pleae try again or contact the administrator."); unset($_SESSION['edit']); }
 		}	
 	}
+	mysqli_close($con);
 	header("location:main.php");
 
 ?>
