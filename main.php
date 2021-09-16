@@ -15,6 +15,7 @@
 			unset($_SESSION['errors']);
 		}
 	}
+	require 'scoreParse.php';
 	require 'head.php';
 	require 'connection.php';
 	require 'weekCalculator.php';
