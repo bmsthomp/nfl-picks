@@ -12,7 +12,7 @@
     	$sxml = simplexml_load_string($sxmlData);
     	$sjson = json_encode($sxml);
     	$sgames = json_decode($sjson, true);
-	}   
+	}
 		
 	$sGame = $sgames['gms']['g'][0]['@attributes']['eid'];
 	$start = new DateTime(substr($sGame, 0, -2));
@@ -24,13 +24,13 @@
 	$days += 1;
 
 	$days = floor($days);
-	if ($days == 21) $days = 22;
+	if ($days == 22) $days = 23;
 	$wkd = $days;
 
 	# REG: 1-17
 	# POST: 18-20, 22
 	# Note -- week 21 is skipped before the super bowl
-	$seasonType = $days > 17 ? "POST" : "REG";
+	$seasonType = $wkd > 18 ? "POST" : "REG";
 
 	if (strtotime($today->format('Y-m-d')) < strtotime($start->format('Y-m-d'))) { $wkd = 1; }
 
