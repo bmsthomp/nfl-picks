@@ -18,7 +18,7 @@ if ($xmlData = file_get_contents($url)) {
     $xml = simplexml_load_string($xmlData);
     $json = json_encode($xml);
     $games = json_decode($json, true);
-}   
+}
 
 $game_array = array();
 

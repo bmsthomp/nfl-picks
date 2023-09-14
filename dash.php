@@ -29,8 +29,8 @@
 					$maxweek = mysqli_fetch_array(mysqli_query($con, $wsql));
 
 					for ($i=$maxweek[0]; $i > 0; $i--) { 
-						# No week 21 (pro bowl)
-						if ($i == 21) { $i --; }
+						# No week 22 (pro bowl)
+						if ($i == 22) { $i --; }
 						if (isset($_GET["week"])){
 							if ($i == $_GET["week"]) { echo "<option selected=\"selected\" value=\"$i\">Week $i</option>"; }		
 							else { echo "<option value=\"$i\">Week $i</option>"; }
@@ -38,7 +38,7 @@
 						} else {
 							if ($i == $days) { echo "<option selected=\"selected\" value=\"$i\">Week $i</option>"; }		
 							else { echo "<option value=\"$i\">Week $i</option>"; }
-							$sweek = $wkd <= 22 ? $days : 22;
+							$sweek = $wkd <= 23 ? $days : 23;
 						}
 					}
 				?>

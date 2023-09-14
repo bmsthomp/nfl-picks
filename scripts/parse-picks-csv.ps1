@@ -1,10 +1,10 @@
 <# 
 
 #>
-$data = Import-Csv $(Resolve-Path ..\data\pick_data_2022.csv)
+$data = Import-Csv $(Resolve-Path ..\data\pick_data_2023.csv)
 
 $weeks = 1..22
-$year = 2022
+$year = 2023
 
 foreach ($week in $weeks) {
 
