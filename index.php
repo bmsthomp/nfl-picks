@@ -5,6 +5,8 @@
 	//check for failed log in
 	if (isset($_SESSION['errors'])) {
 		$error = true; 
+	} else {
+		$error = false;
 	}
 
 ?>

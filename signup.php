@@ -7,7 +7,7 @@
 		<div class="page-header"><div class="row"><div class="col-lg-12"><h1>Create Account</h1></div></div></div>
 
 		<?php 
-			if ($_SESSION['errors']){
+			if (isset($_SESSION['errors'])){
 				foreach($_SESSION['errors'] as $error){
 					echo $error;
 				}

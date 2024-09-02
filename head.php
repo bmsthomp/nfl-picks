@@ -28,7 +28,7 @@
           </button>
       <div class="navbar-collapse collapse navbar-responsive-collapse">
           <?php 
-        if ($_SESSION['username']){ ?>
+        if (isset($_SESSION['username'])){ ?>
 
           <ul class="nav navbar-nav navbar-right">
             <li><a href="main.php">Home</a></li>

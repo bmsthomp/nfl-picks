@@ -2,10 +2,11 @@
 	session_start();
 
 	// if not authenticated go back to index.php
-	if (!$_SESSION['username']){
+	if (!isset($_SESSION['username'])){
 		session_destroy();
 		header("location:index.php");
 	}
+
 	if (isset($_SESSION['edit'])) {
 		$edit = true; 
 		unset($_SESSION['edit']);
@@ -13,21 +14,21 @@
 			$error = true; 
 			// testing
 			unset($_SESSION['errors']);
+		} else {
+			$error = false;
 		}
+	} else { 
+		$edit = false;
 	}
+
 	require 'scoreParse.php';
 	require 'head.php';
 	require 'connection.php';
 	require 'weekCalculator.php';
 
-	$uid = $_SESSION['username'];
-	$tbl_name = "schedule";
-	$sql="SELECT * FROM $tbl_name WHERE week=$wkd and season=$year ORDER BY matchup ASC";
-	$result=mysqli_query($con, $sql);
-	$matches = 0;
-
-	$uid = $_SESSION['username'];
-	$tbl_name = "picks";
+	$user = $_SESSION['username'];
+	$currentYearWeekMatchupsSQL="SELECT * FROM schedule WHERE week=$wkd and season=$year ORDER BY matchup ASC";
+	$currentYearWeekMatchups=mysqli_query($con, $currentYearWeekMatchupsSQL);
 
 	require 'banner.php';
 ?> 
@@ -48,23 +49,32 @@
 			</thead>
 			<tbody>
 			<?php 
-			#echo $matches[0];
-				while($row = mysqli_fetch_array($result)){
-					$matches ++;
+				$matchup = 1;
+				while($weekMatchups = mysqli_fetch_array($currentYearWeekMatchups)){
 
-					# Grab pick for matchup $matches
-					$sql="SELECT team FROM $tbl_name WHERE matchup=$matches and week=$wkd and season=$year and uid='$uid'";
-					$picks = mysqli_query($con, $sql);
-					$pick = mysqli_fetch_array($picks);
+					# Grab pick for matchup $matchup
+					$userPickSQL = "SELECT team FROM picks WHERE matchup=$matchup and week=$wkd and season=$year and uid='$user'";
+					$userPick = mysqli_query($con, $userPickSQL);
+					$pick = mysqli_fetch_array($userPick);
 
 					# If the game has ended set a name on the row
 					$gameState = "on";
-					if (!empty($row[8])) { $gameState = "end" ; }
+					if (!empty($weekMatchups[8])) { $gameState = "end" ; }
 
-					# Check pick against first row of $result (schedule) -> Set class="active"
-					if ($pick[0] == $row[5]){ echo "<tr name=\"$gameState\" id=\"match$row[1]\"><td class=\"clickableCell active\">$row[5]</td><td class=\"clickableCell\">$row[4]</td></tr>"; }
-					elseif ($pick[0] == $row[4]) { echo "<tr name=\"$gameState\" id=\"match$row[1]\"><td class=\"clickableCell\">$row[5]</td><td class=\"clickableCell active\">$row[4]</td></tr>"; }
-					else { echo "<tr name=\"$gameState\" id=\"match$row[1]\"><td class=\"clickableCell\">$row[5]</td><td class=\"clickableCell\">$row[4]</td></tr>"; }
+					# Check pick against first $weekMatchups of $result (schedule) -> Set class="active"
+					if (null != $pick[0]) {
+						# $weekMatchups[5] = away team
+						if ($pick[0] == $weekMatchups[5]){ 
+							echo "<tr name=\"$gameState\" id=\"match$weekMatchups[1]\"><td class=\"clickableCell active\">$weekMatchups[5]</td><td class=\"clickableCell\">$weekMatchups[4]</td></tr>"; 
+						}
+						# $weekMatchups[4] = home team
+						elseif ($pick[0] == $weekMatchups[4]) { 
+							echo "<tr name=\"$gameState\" id=\"match$weekMatchups[1]\"><td class=\"clickableCell\">$weekMatchups[5]</td><td class=\"clickableCell active\">$weekMatchups[4]</td></tr>"; 
+						}
+					} else { 
+						echo "<tr name=\"$gameState\" id=\"match$weekMatchups[1]\"><td class=\"clickableCell\">$weekMatchups[5]</td><td class=\"clickableCell\">$weekMatchups[4]</td></tr>"; 
+					}
+					$matchup ++;
 				}
 			?>
 			</tbody>
@@ -76,7 +86,7 @@
 		<form action="updatePick.php" method="POST">
 			<?
 				# Populate hidden table of picks
-				for ($i = 1; $i <= $matches; $i++){
+				for ($i = 1; $i <= $matchup; $i++){
 					echo "<input name=\"match$i\"  style=\"display:none;\">";
 				}
 			?>

@@ -2,7 +2,7 @@
 	session_start();
 
 	// if not authenticated go back to index.php
-	if (!$_SESSION['username']){
+	if (!isset($_SESSION['username'])){
 		session_destroy();
 		header("location:index.php");
 	}
@@ -25,19 +25,28 @@
 		<div class="col-lg-6">
 			<select id="week_select" name="week" class="form-control">
 				<?php
-					$wsql = "SELECT MAX(week) FROM schedule WHERE season=" . (isset($_GET['season']) ? $_GET['season'] : $year);
-					$maxweek = mysqli_fetch_array(mysqli_query($con, $wsql));
+					$maxWeekSQL = "SELECT MAX(week) FROM schedule WHERE season=" . (isset($_GET['season']) ? $_GET['season'] : $year);
+					$maxweek = mysqli_fetch_array(mysqli_query($con, $maxWeekSQL));
 
 					for ($i=$maxweek[0]; $i > 0; $i--) { 
-						# No week 22 (pro bowl)
-						if ($i == 22) { $i --; }
+
+						if ($i == 22) { $i --; } # No week 22 (pro bowl)
+
 						if (isset($_GET["week"])){
-							if ($i == $_GET["week"]) { echo "<option selected=\"selected\" value=\"$i\">Week $i</option>"; }		
-							else { echo "<option value=\"$i\">Week $i</option>"; }
+							if ($i == $_GET["week"]) { 
+								echo "<option selected=\"selected\" value=\"$i\">Week $i</option>"; 
+							}
+							else {
+								echo "<option value=\"$i\">Week $i</option>";
+							}
 							$sweek = $_GET["week"];
 						} else {
-							if ($i == $days) { echo "<option selected=\"selected\" value=\"$i\">Week $i</option>"; }		
-							else { echo "<option value=\"$i\">Week $i</option>"; }
+							if ($i == $days) { 
+								echo "<option selected=\"selected\" value=\"$i\">Week $i</option>"; 
+							}
+							else { 
+								echo "<option value=\"$i\">Week $i</option>"; 
+							}
 							$sweek = $wkd <= 23 ? $days : 23;
 						}
 					}
@@ -48,13 +57,21 @@
 			<select id="season_select" name="season" class="form-control">
 				<?php
 					for ($i=$year; $i >= 2015; $i--) {
-						if ($_GET["season"]){
-							if ($i == $_GET["season"]) { echo "<option selected=\"selected\" value=\"$i\">$i</option>"; }		
-							else { echo "<option value=\"$i\">$i</option>"; }
+						if (isset($_GET["season"])){
+							if ($i == $_GET["season"]) {
+								echo "<option selected=\"selected\" value=\"$i\">$i</option>"; 
+							}
+							else { 
+								echo "<option value=\"$i\">$i</option>"; 
+							}
 							$season = $_GET["season"];
 						} else {
-							if ($i == $year) { echo "<option selected=\"selected\" value=\"$i\">$i</option>"; }		
-							else { echo "<option value=\"$i\">$i</option>"; }
+							if ($i == $year) { 
+								echo "<option selected=\"selected\" value=\"$i\">$i</option>";
+							}
+							else { 
+								echo "<option value=\"$i\">$i</option>";
+							}
 							$season = $year;
 						}
 					}
@@ -86,7 +103,6 @@
 
 	#$sql = "SELECT schedule.geid, schedule.away, schedule.ascore, schedule.home, schedule.hscore, schedule.matchup, picks.uid, picks.team FROM schedule INNER JOIN picks ON picks.geid = schedule.geid WHERE schedule.season = $season and schedule.week = $sweek"; 
 	#$result = mysqli_query($con, $sql);
-
 
 ?>
 
