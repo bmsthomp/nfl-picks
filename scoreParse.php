@@ -20,12 +20,6 @@ if ($xmlData = file_get_contents($url)) {
     $games = json_decode($json, true);
 }
 
-$game_array = array();
-
-foreach ($games['gms'] as $var) { 
-    array_push($game_array, $var['w'], $var['y']);
-}
-
 foreach ($games['gms']['g'] as $gameArray) {
 
     # Must parse array differently if returning a single
@@ -44,14 +38,14 @@ foreach ($games['gms']['g'] as $gameArray) {
     
     if (mysqli_num_rows($eid) == 0) {
 
-        $sql = "SELECT MAX(matchup) FROM schedule WHERE week=$game_array[0] and season=$game_array[1]";
+        $sql = "SELECT MAX(matchup) FROM schedule WHERE week=$days and season=$year";
         $results = mysqli_query($con, $sql);
         $mxMtchup = mysqli_fetch_array($results);
 
         if ($mxMtchup[0] != null && $mxMtchup[0] != '') { $matchup = $mxMtchup[0] +1; }
         else { $matchup = 1; }
 
-        $sql = "INSERT INTO schedule (matchup, week, season, home, away, geid, seasonType) VALUES ('$matchup', $game_array[0], $game_array[1], '$home_team', '$away_team', '$geid', '$seasonType')";
+        $sql = "INSERT INTO schedule (matchup, week, season, home, away, geid, seasonType) VALUES ('$matchup', $days, $year, '$home_team', '$away_team', '$geid', '$seasonType')";
         $test = mysqli_query($con, $sql);
         if (!$test){echo "failed";}
 

@@ -11,10 +11,7 @@
 	require 'connection.php';
 	require 'weekCalculator.php';
 
-	$uid = $_SESSION['username'];
-	$tbl_name = "picks";
-	$tbl_name_2 = "schedule";
-	$sql = "SELECT picks.uid, SUM(picks.team = schedule.winner) as picks FROM $tbl_name INNER JOIN $tbl_name_2 ON picks.week = schedule.week AND picks.season = schedule.season AND picks.matchup = schedule.matchup WHERE picks.season=" . (isset($_GET['season']) ? $_GET['season'] : $year) . " GROUP BY picks.uid ORDER BY picks DESC";
+	$sql = "SELECT picks.uid, SUM(picks.team = schedule.winner) as picks FROM picks INNER JOIN schedule ON picks.week = schedule.week AND picks.season = schedule.season AND picks.matchup = schedule.matchup WHERE picks.season=" . (isset($_GET['season']) ? $_GET['season'] : $year) . " GROUP BY picks.uid ORDER BY picks DESC";
 	$result = mysqli_query($con, $sql);
 ?> 
 
@@ -30,13 +27,18 @@
 	<div class="col-lg-12">
 		<select id="leaderboard_select" name="week" class="form-control">
 			<?php
-				$ssql = "SELECT MIN(season) FROM schedule";
-				$minyear = mysqli_fetch_array(mysqli_query($con, $ssql));
+				$minSeasonValueSQL = "SELECT MIN(season) FROM schedule";
+				$minSeasonValue = mysqli_fetch_array(mysqli_query($con, $minSeasonValueSQL));
 				mysqli_close($con);
 
-				for ($i=$year; $i >= $minyear[0]; $i--) { 
-					if ($i == $_GET["season"]) { echo "<option selected=\"selected\" value=\"$i\">$i</option>"; }
-					else { echo "<option value=\"$i\">$i</option>"; }
+				for ($i=$year; $i >= $minSeasonValue[0]; $i--) {
+					$selectedSeason = isset($_GET["season"]) ? $_GET["season"] : $year;
+					if ($i == $selectedSeason) { 
+						echo "<option selected=\"selected\" value=\"$i\">$i</option>"; 
+					}
+					else { 
+						echo "<option value=\"$i\">$i</option>"; 
+					}
 				}
 			?>
 		</select>

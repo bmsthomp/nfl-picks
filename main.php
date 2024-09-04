@@ -62,7 +62,7 @@
 					if (!empty($weekMatchups[8])) { $gameState = "end" ; }
 
 					# Check pick against first $weekMatchups of $result (schedule) -> Set class="active"
-					if (null != $pick[0]) {
+					if (isset($pick[0])) {
 						# $weekMatchups[5] = away team
 						if ($pick[0] == $weekMatchups[5]){ 
 							echo "<tr name=\"$gameState\" id=\"match$weekMatchups[1]\"><td class=\"clickableCell active\">$weekMatchups[5]</td><td class=\"clickableCell\">$weekMatchups[4]</td></tr>"; 
@@ -84,7 +84,7 @@
 <div class="container">
 	<div class="col-lg-12">
 		<form action="updatePick.php" method="POST">
-			<?
+			<?php
 				# Populate hidden table of picks
 				for ($i = 1; $i <= $matchup; $i++){
 					echo "<input name=\"match$i\"  style=\"display:none;\">";

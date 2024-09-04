@@ -84,25 +84,20 @@
 	// fetch uids
 
 	$uids = array();
-	$sql = "SELECT uid FROM users";
-	$result = mysqli_query($con, $sql);
+
+	$result = mysqli_query($con, "SELECT uid FROM users WHERE active = 1");
 	while ($uid = mysqli_fetch_assoc($result)) { array_push($uids, $uid); }
-	#print_r($uids[0]['uid']);
 
 	// fetch geids
 	$geids = array();
 	$sql = "SELECT geid, away, ascore, home, hscore, winner FROM schedule where week=$sweek and season=$season";
 	$result = mysqli_query($con, $sql);
 	while ($geid = mysqli_fetch_assoc($result)) { array_push($geids, $geid); }
-	#print_r($geids);
-	
+
 	// fetch weekly totals
 	$totals = array();
 	$sql = "SELECT picks.uid, SUM(picks.team = schedule.winner) as picks FROM picks INNER JOIN schedule ON picks.week = schedule.week AND picks.season = schedule.season AND picks.matchup = schedule.matchup WHERE schedule.week = $sweek AND schedule.season = $season GROUP BY picks.uid";
 	$result = mysqli_query($con, $sql);
-
-	#$sql = "SELECT schedule.geid, schedule.away, schedule.ascore, schedule.home, schedule.hscore, schedule.matchup, picks.uid, picks.team FROM schedule INNER JOIN picks ON picks.geid = schedule.geid WHERE schedule.season = $season and schedule.week = $sweek"; 
-	#$result = mysqli_query($con, $sql);
 
 ?>
 
@@ -116,7 +111,7 @@
 				<?php foreach($uids as $uid) { echo "<th>{$uid['uid']}</th>"; } ?>
 			</thead>
 			<tbody>
-				<?
+				<?php
 					foreach ($geids as $geid) {
 						$winner = $geid['winner'];
 						echo "<tr><td class=\"col-sm-1\">{$geid['away']}</td><td class=\"col-sm-1\">{$geid['ascore']}</td><td class=\"col-sm-1\">{$geid['home']}</td><td class=\"col-sm-1\">{$geid['hscore']}</td><td class=\"col-sm-1\"></td>";
