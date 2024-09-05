@@ -96,7 +96,15 @@
 
 	// fetch weekly totals
 	$totals = array();
-	$sql = "SELECT picks.uid, SUM(picks.team = schedule.winner) as picks FROM picks INNER JOIN schedule ON picks.week = schedule.week AND picks.season = schedule.season AND picks.matchup = schedule.matchup WHERE schedule.week = $sweek AND schedule.season = $season GROUP BY picks.uid";
+	$sql = "SELECT 
+				picks.uid,
+				SUM(picks.team = schedule.winner) as picks, 
+				users.active as active 
+			FROM picks 
+			INNER JOIN schedule ON picks.week = schedule.week AND picks.season = schedule.season AND picks.matchup = schedule.matchup 
+			INNER JOIN users ON picks.uid = users.uid WHERE schedule.week = $sweek AND schedule.season = $season AND active = 1 
+			GROUP BY uid 
+			ORDER BY uid;";
 	$result = mysqli_query($con, $sql);
 
 ?>
