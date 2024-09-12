@@ -3,7 +3,7 @@
 	$host="localhost"; // Host name 
 	$username=""; // Mysql username 
 	$password=""; // Mysql password
-	$db_name="slahsdot_picks"; // Database name 
+	$db_name="nflpicks"; // Database name 
 
 	$con = new mysqli("$host", "$username", "$password", "$db_name");
 
