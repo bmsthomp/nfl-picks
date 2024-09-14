@@ -9,11 +9,11 @@
 	$stDate = $dataRoot . $year . "/" . $year . "1.xml";
 
 	if ($sxmlData = file_get_contents($stDate)) {
-    	$sxml = simplexml_load_string($sxmlData);
-    	$sjson = json_encode($sxml);
-    	$sgames = json_decode($sjson, true);
+		$sxml = simplexml_load_string($sxmlData);
+		$sjson = json_encode($sxml);
+		$sgames = json_decode($sjson, true);
 	}
-		
+
 	$sGame = $sgames['gms']['g'][0]['@attributes']['eid'];
 	$start = new DateTime(substr($sGame, 0, -2));
 
