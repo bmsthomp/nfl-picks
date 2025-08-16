@@ -1,12 +1,16 @@
-<?php 
-	session_start();
+<?php
+	// Start session if not already started
+	if (session_status() === PHP_SESSION_NONE) {
+		session_start();
+	}
+
 	require 'head.php';
 
-	//check for failed log in
+	// Check for login errors and clear error flag after checking
+	$error = false;
 	if (isset($_SESSION['errors'])) {
-		$error = true; 
-	} else {
-		$error = false;
+		$error = true;
+		unset($_SESSION['errors']); // Clear error flag after use
 	}
 
 ?>

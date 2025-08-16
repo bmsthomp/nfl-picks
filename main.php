@@ -65,14 +65,14 @@
 					if (isset($pick[0])) {
 						# $weekMatchups[5] = away team
 						if ($pick[0] == $weekMatchups[5]){ 
-							echo "<tr name=\"$gameState\" id=\"match$weekMatchups[1]\"><td class=\"clickableCell active\">$weekMatchups[5]</td><td class=\"clickableCell\">$weekMatchups[4]</td></tr>"; 
+							echo "<tr name=\"$gameState\" id=\"match$weekMatchups[1]\"><td class=\"clickableCell active\"><img src="./img/$weekMatchups[5]-logo.png" />$weekMatchups[5]</td><td class=\"clickableCell\"><img src="./img/$weekMatchups[4]-logo.png" />$weekMatchups[4]</td></tr>"; 
 						}
 						# $weekMatchups[4] = home team
 						elseif ($pick[0] == $weekMatchups[4]) { 
-							echo "<tr name=\"$gameState\" id=\"match$weekMatchups[1]\"><td class=\"clickableCell\">$weekMatchups[5]</td><td class=\"clickableCell active\">$weekMatchups[4]</td></tr>"; 
+							echo "<tr name=\"$gameState\" id=\"match$weekMatchups[1]\"><td class=\"clickableCell\"><img src="./img/$weekMatchups[5]-logo.png" />$weekMatchups[5]</td><td class=\"clickableCell active\"><img src="./img/$weekMatchups[4]-logo.png" />$weekMatchups[4]</td></tr>"; 
 						}
 					} else { 
-						echo "<tr name=\"$gameState\" id=\"match$weekMatchups[1]\"><td class=\"clickableCell\">$weekMatchups[5]</td><td class=\"clickableCell\">$weekMatchups[4]</td></tr>"; 
+						echo "<tr name=\"$gameState\" id=\"match$weekMatchups[1]\"><td class=\"clickableCell\"><img src="./img/$weekMatchups[5]-logo.png" />$weekMatchups[5]</td><td class=\"clickableCell\"><img src="./img/$weekMatchups[4]-logo.png" />$weekMatchups[4]</td></tr>"; 
 					}
 					$matchup ++;
 				}
