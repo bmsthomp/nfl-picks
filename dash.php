@@ -132,11 +132,12 @@
 							$r = mysqli_query($con, $sql);
 
 							if(mysqli_num_rows($r) == 1){
-								$team = mysqli_fetch_assoc($r);
-								if ($team['team'] == $winner){ 
-									echo "<td class=\"col-sm-1 success\">{$team['team']}</td>"; 
+								$teamData = mysqli_fetch_assoc($r);
+								$teamNameLower = strtolower($teamData['team']);
+								if ($teamData['team'] == $winner){ 
+									echo "<td class=\"col-sm-1 success\"><img class=\"teamLogo\" src=\"./img/$teamNameLower-logo.png\" /></td>";
 								} else { 
-									echo "<td class=\"col-sm-1\">{$team['team']}</td>"; 
+									echo "<td class=\"col-sm-1\"><img class=\"teamLogo\" src=\"./img/$teamNameLower-logo.png\" /></td>"; 
 								}
 								
 							} else {
