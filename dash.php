@@ -121,8 +121,12 @@
 			<tbody>
 				<?php
 					foreach ($geids as $geid) {
+
+						$awayTeamLowerCase = strtolower($geid['away']);
+						$homeTeamLowerCase = strtolower($geid['home']);
+
 						$winner = $geid['winner'];
-						echo "<tr><td class=\"col-sm-1\">{$geid['away']}</td><td class=\"col-sm-1\">{$geid['ascore']}</td><td class=\"col-sm-1\">{$geid['home']}</td><td class=\"col-sm-1\">{$geid['hscore']}</td><td class=\"col-sm-1\"></td>";
+						echo "<tr><td class=\"col-sm-1\"><img class=\"teamLogo\" src=\"./img/$awayTeamLowerCase-logo.png\" /></td><td class=\"col-sm-1\">{$geid['ascore']}</td><td class=\"col-sm-1\"><img class=\"teamLogo\" src=\"./img/$homeTeamLowerCase-logo.png\" /></td><td class=\"col-sm-1\">{$geid['hscore']}</td><td class=\"col-sm-1\"></td>";
 						foreach ($uids as $uid){
 							$sql = "SELECT team FROM picks WHERE uid='{$uid['uid']}' and geid='{$geid['geid']}'";
 							$r = mysqli_query($con, $sql);
