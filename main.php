@@ -57,15 +57,17 @@
 					$userPick = mysqli_query($con, $userPickSQL);
 					$pick = mysqli_fetch_array($userPick);
 
+					# $weekMatchups[5] = away team
+					$awayTeamLowerCase = strtolower($weekMatchups[5]);
+					$homeTeamLowerCase = strtolower($weekMatchups[4]);
+
 					# If the game has ended set a name on the row
 					$gameState = "on";
 					if (!empty($weekMatchups[8])) { $gameState = "end" ; }
 
 					# Check pick against first $weekMatchups of $result (schedule) -> Set class="active"
 					if (isset($pick[0])) {
-						# $weekMatchups[5] = away team
-						$awayTeamLowerCase = strtolower($weekMatchups[5]);
-						$homeTeamLowerCase = strtolower($weekMatchups[4]);
+						# generating rows for selection
 						if ($pick[0] == $weekMatchups[5]){ 
 							echo "<tr name=\"$gameState\" id=\"match$weekMatchups[1]\"><td class=\"clickableCell active\"><img class=\"teamLogo\" src=\"./img/$awayTeamLowerCase-logo.png\" />$weekMatchups[5]</td><td class=\"clickableCell\"><img class=\"teamLogo\" src=\"./img/$homeTeamLowerCase-logo.png\" />$weekMatchups[4]</td></tr>"; 
 						}
