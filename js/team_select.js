@@ -14,7 +14,7 @@ $(document).ready(function () {
 			$td.addClass("active");
 
 			$match = $parent.attr('id');
-			$("[name=" + $match + "]").val($(this).text());
+			$("[name=" + $match + "]").val($(this).find(".team-name").text());
 		}
 
 	});

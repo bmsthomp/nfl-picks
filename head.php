@@ -19,32 +19,32 @@
   <![endif]-->
 </head>
 <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <nav class="navbar navbar-inverse navbar-fixed-top site-navbar" role="navigation">
     <div class="container">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+      <div class="navbar-header">
+        <?php if (isset($_SESSION['username'])) { ?>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#site-navigation" aria-controls="site-navigation" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-      <div class="navbar-collapse collapse navbar-responsive-collapse">
-          <?php 
-        if (isset($_SESSION['username'])){ ?>
-
+        <?php } ?>
+        <a class="navbar-brand" href="<?php echo isset($_SESSION['username']) ? 'main.php' : 'index.php'; ?>">NFL <span>Picks</span></a>
+      </div>
+      <?php if (isset($_SESSION['username'])) { ?>
+        <div id="site-navigation" class="navbar-collapse collapse navbar-responsive-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="main.php">Home</a></li>
             <li><a href="dash.php">Picks</a></li>
             <li><a href="leaderboard.php">Leaderboard</a></li>
             <li><a href="logout.php">Logout</a></li>
           </ul>
-      <?php 
-        }
-      ?>
-      </div>
+        </div>
+      <?php } ?>
     </div>
   </nav>
   <?php 
   // require 'scoreParse.php'; 
   ?>
-
-
 

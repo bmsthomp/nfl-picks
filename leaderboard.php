@@ -51,8 +51,15 @@
 			</thead>
 			<tbody>
 				<?php
+					$position = 1;
 					while($row = mysqli_fetch_array($result)){
-						echo "<tr><td>$row[0]</td><td>$row[1]</td></tr>";
+						$rankIcon = '';
+						if ($position <= 3) {
+							$place = array(1 => '1st', 2 => '2nd', 3 => '3rd')[$position];
+							$rankIcon = '<span class="glyphicon glyphicon-certificate leaderboard-rank rank-' . $position . '" role="img" aria-label="' . $place . ' place"></span> ';
+						}
+						echo '<tr><td>' . $rankIcon . htmlspecialchars((string) $row[0], ENT_QUOTES, 'UTF-8') . '</td><td>' . htmlspecialchars((string) $row[1], ENT_QUOTES, 'UTF-8') . '</td></tr>';
+						$position++;
 					}
 				?>
 			</tbody>

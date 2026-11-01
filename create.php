@@ -1,46 +1,54 @@
 <?php
-	session_start();
+	require 'security.php';
 
-	// username and password sent from form 
-	$uid=$_POST['uid'];
-	$fname=$_POST['fname']; 
-	$lname=$_POST['lname'];
-	$password=$_POST['password'];
+	if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !verify_csrf()) {
+		$_SESSION['errors'] = array("Could not create account.");
+		header('Location: signup.php');
+		exit;
+	}
 
-	// if there is no value for any input return to signup.php
-	if ($fname and $lname and $password){
+	$uid = trim((string) ($_POST['uid'] ?? ''));
+	$fname = trim((string) ($_POST['fname'] ?? ''));
+	$lname = trim((string) ($_POST['lname'] ?? ''));
+	$password = (string) ($_POST['password'] ?? '');
 
-		require 'connection.php';
+	if ($uid === '' || $fname === '' || $lname === '' || $password === '') {
+		header('Location: signup.php');
+		exit;
+	}
 
-		$uid = mysqli_real_escape_string($con, $uid);
-		$fname = mysqli_real_escape_string($con, $fname);
-		$lname = mysqli_real_escape_string($con, $lname);
-		$password = mysqli_real_escape_string($con, $password);
+	require 'connection.php';
 
-		$sql_check = mysqli_query($con, "SELECT uid FROM users WHERE uid ='$uid';");
+	$stmt = $con->prepare('SELECT uid FROM users WHERE uid = ? LIMIT 1');
+	$stmt->bind_param('s', $uid);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	$count = $result->num_rows;
+	$stmt->close();
+
+	if ($count > 0) {
+		$_SESSION['errors'] = array("There is already an account associated with this username.");
 		mysqli_close($con);
-		$sql_check = mysqli_num_rows($sql_check);
+		header('Location: signup.php');
+		exit;
+	}
 
-		// the uid is unique
-		if ($sql_check==0){ 
+	$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+	$insert = $con->prepare('INSERT INTO users (uid, fname, lname, pw) VALUES (?, ?, ?, ?)');
+	$insert->bind_param('ssss', $uid, $fname, $lname, $hashedPassword);
+	$success = $insert->execute();
+	$insert->close();
+	mysqli_close($con);
 
-			$sql = "INSERT INTO users (uid, fname, lname, pw) VALUES ('$uid', '$fname', '$lname', MD5('$password'));";
-			$result = mysqli_query($con, $sql);
+	if (!$success) {
+		$_SESSION['errors'] = array("Could not create account.");
+		header('Location: signup.php');
+		exit;
+	}
 
-			if (!$result){
-				$_SESSION['errors'] = array("Could not create account.");
-				header('location:signup.php');
-
-			} else {
-				$_SESSION['username'] = $email;
-				$_SESSION['password'] = $password;
-				header('location:main.php');
-			}
-		} else {
-			$_SESSION['errors'] = array("There is already an account associated with this username.");
-			header('location:signup.php');
-		}
-
-	} else {header('location:signup.php');}
-	
+	session_regenerate_id(true);
+	$_SESSION['username'] = $uid;
+	$_SESSION['role'] = 'user';
+	header('Location: main.php');
+	exit;
 ?>

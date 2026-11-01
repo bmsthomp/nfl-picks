@@ -1,15 +1,15 @@
 <?php
+$config = require __DIR__ . '/config/database.php';
 
-	$host="localhost"; // Host name 
-	$username=""; // Mysql username 
-	$password=""; // Mysql password
-	$db_name="nflpicks"; // Database name 
+$con = new mysqli(
+    getenv('DB_HOST') ?: $config['host'],
+    getenv('DB_USER') ?: $config['username'],
+    getenv('DB_PASSWORD') ?: $config['password'],
+    getenv('DB_NAME') ?: $config['database']
+);
 
-	$con = new mysqli("$host", "$username", "$password", "$db_name");
-
-	// Check connection
-	if ($con -> connect_errno) {
-		echo "Failed to connect to MySQL: " . $con -> connect_error;
-		exit();
-	}
-?>
+// Check connection
+if ($con->connect_errno) {
+    echo "Failed to connect to MySQL: " . $con->connect_error;
+    exit();
+}

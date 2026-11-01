@@ -1,18 +1,12 @@
 <?php
-	// Start session if not already started
-	if (session_status() === PHP_SESSION_NONE) {
-		session_start();
-	}
-
+	require 'security.php';
 	require 'head.php';
 
-	// Check for login errors and clear error flag after checking
 	$error = false;
 	if (isset($_SESSION['errors'])) {
 		$error = true;
-		unset($_SESSION['errors']); // Clear error flag after use
+		unset($_SESSION['errors']);
 	}
-
 ?>
 <div class="jumbotron">
 	<div class="container">
@@ -20,14 +14,13 @@
 			<h1>NFL Picks</h1>
 		</div>
 		<div class="col-lg-4">
-			<!-- Login Form -->
 			<?php if (!isset($_SESSION['username'])){ ?>
-
 			<form class="form-horizontal" method="POST" action="login.php">
 				<fieldset>
+					<input type="hidden" name="csrf_token" value="<?php echo e(csrf_token()); ?>">
 					<div class="form-group <?php if($error){ echo "has-error"; }?>">
 						<div class="col-lg-12">
-							<input class="form-control input-sm" name="username" required length="50" autofocus placeholder="Enter Username" value="<?php if(isset($_SESSION['username'])){ echo $_SESSION['username'];}?>">
+							<input class="form-control input-sm" name="username" required length="50" autofocus placeholder="Enter Username" value="<?php if(isset($_SESSION['username'])){ echo e((string) $_SESSION['username']); } ?>">
 						</div>
 					</div>
 					<div class="form-group <?php if($error){ echo "has-error"; }?>">
@@ -39,18 +32,12 @@
 						<div class="col-lg-2">
 							<button name="submit" class="btn btn-default btn-sm" type="submit">Log In</button>
 						</div>
-						<div class="col-lg-10">
-							<em>Not a member? <a href="signup.php">Sign up</a></em>
-						</div>
 					</div>
 				</fieldset>
 			</form>
-			<?php
-				} 
-			?>
+			<?php } ?>
 		</div>
 	</div>
 </div>
-
 
 <?php require 'footer.php'; ?>

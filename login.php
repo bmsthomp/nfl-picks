@@ -1,39 +1,40 @@
 <?php
-	session_start();
-
+	require 'security.php';
 	require 'connection.php';
-	$tbl_name = "users";
 
-	// username and password sent from form 
-	$myusername=$_POST['username'];
-	$mypassword=md5($_POST['password']);
-
-	// To protect MySQL injection (more detail about MySQL injection)
-	$usr = mysqli_real_escape_string($con, $myusername);
-	$pwd = mysqli_real_escape_string($con, $mypassword);
-
-	$sql="SELECT role FROM $tbl_name WHERE uid='$usr' and pw='$pwd'";
-
-	$result = mysqli_query($con, $sql);
-	$count = mysqli_num_rows($result);
-
-	// fetch user role (unimplemented)
-	// $role = mysqli_fetch_array($result);
-
-	mysqli_free_result($result);
-	mysqli_close($con);
-
-	// If result matched $myusername and $mypassword, table row must be 1 row
-	if($count==1){
-		// Register $myusername, $mypassword and redirect to file "login_success.php"
-		$_SESSION['username'] = $usr;
-		$_SESSION['role'] = "user";
-		$_SESSION['errors'] = false;
-
-		header("location:main.php");
-	} else {
+	if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !verify_csrf()) {
 		$_SESSION['errors'] = array("Wrong Username or Password");
-		header("location:index.php");
+		header('Location: index.php');
+		exit;
 	}
 
+	$myusername = trim((string) ($_POST['username'] ?? ''));
+	$mypassword = (string) ($_POST['password'] ?? '');
+
+	if ($myusername === '' || $mypassword === '') {
+		$_SESSION['errors'] = array("Wrong Username or Password");
+		header('Location: index.php');
+		exit;
+	}
+
+	$stmt = $con->prepare("SELECT uid, pw, role FROM users WHERE uid = ? LIMIT 1");
+	$stmt->bind_param('s', $myusername);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	$user = $result->fetch_assoc();
+	$stmt->close();
+	mysqli_close($con);
+
+	if ($user && verify_password($mypassword, (string) $user['pw'])) {
+		session_regenerate_id(true);
+		$_SESSION['username'] = $user['uid'];
+		$_SESSION['role'] = $user['role'] ?? 'user';
+		$_SESSION['errors'] = false;
+		header('Location: main.php');
+		exit;
+	}
+
+	$_SESSION['errors'] = array("Wrong Username or Password");
+	header('Location: index.php');
+	exit;
 ?>
